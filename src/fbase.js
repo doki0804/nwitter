@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
+  updateProfile,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -17,7 +18,18 @@ import {
   collection,
   onSnapshot,
   orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
+  where,
 } from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -47,6 +59,16 @@ export {
   collection,
   onSnapshot,
   orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
+  where,
+  updateProfile,
 };
 
 export const dbService = getFirestore();
+export const storageService = getStorage();

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "components/Router";
-import { auth, onAuthStateChanged } from "fbase";
+import { auth, onAuthStateChanged, updateProfile } from "fbase";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -10,21 +10,38 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(true);
-        setUserObj(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) =>
+            updateProfile(user, { displayName: user.displayName }),
+        });
       } else {
         setIsLoggedIn(false);
       }
       setInit(true);
     });
   }, []);
+  const refreshUser = () => {
+    const user = auth.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: (args) =>
+        updateProfile(user, { displayName: user.displayName }),
+    });
+  };
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} />
+        <AppRouter
+          refreshUser={refreshUser}
+          isLoggedIn={isLoggedIn}
+          userObj={userObj}
+        />
       ) : (
         "Initailizing..."
       )}
-      <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </>
   );
 }
